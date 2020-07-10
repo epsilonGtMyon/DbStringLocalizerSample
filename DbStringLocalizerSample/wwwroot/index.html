@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google" content="notranslate" />
+    <script type="text/javascript" src="./js/axios.min.js"></script>
+    <script type="text/javascript" src="./js/vue.min.js"></script>
+    <title>DbStringLocalizerSample</title>
+</head>
+
+<body>
+    <div id="app">
+        <div>
+            {{message}}
+        </div>
+        <div>
+            <button @click="message01">Message01</button>
+            <button @click="message02">Message02</button>
+        </div>
+        <div>
+            <button @click="allItems">AllItems</button>
+            <button @click="allMessages">AllMessages</button>
+        </div>
+        <div>
+            <select v-model="cultureName">
+                <option value="ja-JP">ja-JP</option>
+                <option value="en-US">en-US</option>
+            </select>
+            <button @click="changeCulture">ChangeCulture</button>
+        </div>
+
+    </div>
+    <script>
+        const ax = axios.create({
+            baseURL: '/api/',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        });
+
+        new Vue({
+            el: '#app',
+            data() {
+                return {
+                    message: "",
+                    cultureName: "ja-JP",
+                }
+            },
+            methods: {
+                async message01() {
+                    const r = await ax.get("/sandbox01/message01")
+                    this.message = r.data;
+                },
+                async message02() {
+                    const r = await ax.get("/sandbox01/message02")
+                    this.message = r.data;
+                },
+                async allItems() {
+                    const r = await ax.get("/sandbox01/all-items")
+                    this.message = r.data;
+                },
+                async allMessages() {
+                    const r = await ax.get("/sandbox01/all-messages")
+                    this.message = r.data;
+                },
+                async changeCulture() {
+                    const d = {
+                        cultureName: this.cultureName
+                    }
+                    const r = await ax.post("/sandbox01/change-culture", d)
+                },
+
+                //--------
+            }
+        })
+
+    </script>
+</body>
+
+</html>
